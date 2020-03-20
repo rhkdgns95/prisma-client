@@ -13,6 +13,14 @@ const GlobalStyles = createGlobalStyle`
     html, body {
         padding: 0;
         margin: 0;
+        height: 100%;
+    }
+    ul, li, a {
+        padding: 0;
+        margin: 0;
+        list-style: inherit;
+        text-decoration: inherit;
+        color: inherit;
     }
 `;
 

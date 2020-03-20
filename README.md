@@ -8,7 +8,7 @@
 - [x] Settings apollo.
 - [x] Deployed Prisma test to Query.
 - [x] Routes, Theme, styled-components.
-- [ ] Navigation.
+- [x] Layout + Navigation.
 
 ## Install
 - yarn create react-app ./ --template typescript

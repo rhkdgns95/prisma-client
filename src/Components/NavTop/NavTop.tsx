@@ -14,8 +14,7 @@ interface IContainer {
 const Container = styled.div<IContainer>`
     width: 100%;
     height: ${props => props.navHeight}px;
-    background-color: #f4f6f5;
-    // background-color: red;
+    background-color: ${props => props.theme.navTopColor};
 `;
 
 export default NavbarTopContainer;

@@ -4,21 +4,22 @@ import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 import Payment from '../../Routes/Payment';
 import Login from '../../Routes/Login';
 import Home from '../../Routes/Home';
-// import AppProvider, { useAppContext } from './AppProvider';
-// import { BrowserRouter } from 'react-router-dom';
+import Layout from '../Layout';
 
-const App: any = () => (
-    <AppProvider>
-        <AppPresenter />
-    </AppProvider>
-);
+const App: any = () => {
+    return (
+        <AppProvider>
+            <AppPresenter />
+        </AppProvider>
+    );
+}
 
 const AppPresenter = () => {
     const { loggedIn } = useAppContext();
     return (
         <BrowserRouter>
             {
-                loggedIn ? <UserLoggedIn /> : <UserLoggedOut/>
+                loggedIn ? <Layout><UserLoggedIn /></Layout> : <UserLoggedOut/>
             }
         </BrowserRouter>
     )

@@ -9,7 +9,7 @@ interface IProps {
 const LayoutContainer: React.FC<IProps> = ({
     children
 }) => {
-    const navWidth = 100;
+    const navWidth = 150;
     const navHeight = 80;
     return (
         <Container>
