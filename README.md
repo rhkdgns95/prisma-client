@@ -6,8 +6,12 @@
 ## Todo
 - [x] Init App.
 - [x] Settings apollo.
-- [] Deployed Prisma test to Query.
+- [x] Deployed Prisma test to Query.
+- [x] Routes, Theme, styled-components.
+- [ ] Navigation.
 
 ## Install
 - yarn create react-app ./ --template typescript
 - yarn add react-apollo graphql graphql-tools apollo-boost
+- yarn add react-router-dom @types/react-router-dom
+- yarn add styled-components @types/styled-components

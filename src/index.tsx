@@ -2,12 +2,18 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { ApolloProvider } from "react-apollo";
 import * as serviceWorker from './serviceWorker';
-import App from './Components/App';
 import client from './apollo';
+import { ThemeProvider } from 'styled-components';
+import GlobalStyles from './Styles/global-styles';
+import { theme } from './Styles/theme';
+import App from './Components/App';
 
 ReactDOM.render(
     <ApolloProvider client={client}>
-        <App />
+        <ThemeProvider theme={theme}>
+            <GlobalStyles />
+            <App />
+        </ThemeProvider>
     </ApolloProvider>
 , 
 document.getElementById('root'));
