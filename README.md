@@ -5,8 +5,9 @@
 
 ## Todo
 - [x] Init App.
-
+- [x] Settings apollo.
 
 
 ## Install
 - yarn create react-app ./ --template typescript
+- yarn add react-apollo graphql graphql-tools apollo-boost
