@@ -1,9 +1,25 @@
 import React from 'react';
-import { useApolloClient } from 'react-apollo';
+import { useApolloClient, useQuery } from 'react-apollo';
+import { gql } from "apollo-boost";
 
+const GET_TABLES = gql`
+    query {
+        tables {
+            id
+            title
+        }
+    }
+`;
 const AppContainer = () => {
-    const client = useApolloClient();
-    console.log("Client: ", client);
+    const { data } = useQuery(GET_TABLES, {
+        onCompleted: data => {
+            console.log("onCompleted: ", data);
+        },
+        onError: data => {
+            console.log("onError: ", data);
+        }
+    });
+    console.log("RESULT : ", data);
     return <AppPresenter />;
 }
 const AppPresenter = () => (

@@ -6,7 +6,7 @@
 ## Todo
 - [x] Init App.
 - [x] Settings apollo.
-
+- [] Deployed Prisma test to Query.
 
 ## Install
 - yarn create react-app ./ --template typescript
