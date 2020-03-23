@@ -1,8 +1,9 @@
 import React, { useEffect } from 'react';
-import PaymentProvider from './PaymentProvider';
+import PaymentProvider, { usePaymentContext } from './PaymentProvider';
 import { useAppContext } from '../../Components/App/AppProvider';
 import { RouteComponentProps } from 'react-router-dom';
 import navigations from '../../navigations';
+import Grid from '../../ApiComponents/Grid';
 
 interface IProps extends RouteComponentProps<any> {
 
@@ -27,10 +28,16 @@ const Payment: React.FC<IProps> = ({ match: { path }}) => {
     );
 }
 const PaymentPresenter = () => {
-
+    const { loadingGetPayments, payments } = usePaymentContext();
     return (
         <>
-            hello payment
+        {
+            loadingGetPayments ? "Loading..." :
+                <>
+                    <Grid orders={payments} />
+                </>
+        }
+            {/* <Grid orders={service.getNewOrders()}/> */}
         </>
     )
 }

@@ -12,12 +12,6 @@ const NavLeft: React.FC<IProps> = ({ navWidth }) => {
     const { navigation }  = useAppContext();
     console.log("NAvLeft: ", navigation);
     
-    // const [navIndex, setNavIndex] = useState<number>(0);
-    
-    // const onChange = () => {
-
-    // }
-
     return (
         <Container navWidth={navWidth}>
             <Wrapper>

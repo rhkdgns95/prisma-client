@@ -9,9 +9,11 @@
 - [x] Deployed Prisma test to Query.
 - [x] Routes, Theme, styled-components.
 - [x] Layout + Navigation.
+- [x] Create DevExpress-Components Part 1.
 
 ## Install
 - yarn create react-app ./ --template typescript
 - yarn add react-apollo graphql graphql-tools apollo-boost
 - yarn add react-router-dom @types/react-router-dom
 - yarn add styled-components @types/styled-components
+- yarn add devextreme devextreme-react

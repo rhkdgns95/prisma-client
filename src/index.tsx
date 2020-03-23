@@ -7,6 +7,8 @@ import { ThemeProvider } from 'styled-components';
 import GlobalStyles from './Styles/global-styles';
 import { theme } from './Styles/theme';
 import App from './Components/App';
+import 'devextreme/dist/css/dx.common.css';
+import 'devextreme/dist/css/dx.light.css';
 
 ReactDOM.render(
     <ApolloProvider client={client}>

@@ -11,10 +11,11 @@ const LayoutContainer: React.FC<IProps> = ({
 }) => {
     const navWidth = 150;
     const navHeight = 80;
+
     return (
         <Container>
             <Wrapper navWidth={navWidth} navHeight={navHeight}>
-                <NavLeft navWidth={navWidth} />
+                <NavLeft navWidth={navWidth}/>
                 <NavTop navHeight={navHeight}/>
                 <Content>
                 { 
