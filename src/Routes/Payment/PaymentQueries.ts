@@ -9,7 +9,7 @@ import { FragmentPayment } from "../../fragment";
 
 export const GET_PAYMENTS = gql`
     query GetPayments {
-        payments {
+        payments(orderBy: createdAt_ASC) {
             ...ItemPayment
         }
     }

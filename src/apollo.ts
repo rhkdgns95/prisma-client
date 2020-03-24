@@ -5,8 +5,8 @@ import { split } from "apollo-link";
 import { getMainDefinition } from 'apollo-utilities';
 import { InMemoryCache } from 'apollo-boost';
 
-const prisma_endpoint: string = "https://eu1.prisma.sh/bankda/bankda-careda/dev";   // graphql - query endpoint
-const prisma_ws_endpoint: string = "wss://eu1.prisma.sh/bankda/bankda-careda/dev";  // graphql - webscoket endpoint
+const prisma_endpoint: string = "https://eu1.prisma.sh/rhkdgns9489-b90313/careda/dev";   // graphql - query endpoint
+const prisma_ws_endpoint: string = "wss://eu1.prisma.sh/rhkdgns9489-b90313/careda/dev";  // graphql - webscoket endpoint
 
 const cache = new InMemoryCache();
 
