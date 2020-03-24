@@ -28,7 +28,7 @@ const Payment: React.FC<IProps> = ({ match: { path }}) => {
 };
 
 const PaymentPresenter = () => {
-    const { loadingGetPayments, payments, queryUpdatePayment } = usePaymentContext();
+    const { loadingGetPayments, payments, queryUpdatePayment, queryDeletePayment } = usePaymentContext();
 
     /** 
      *  향후 보완점 [매우 중요!]
@@ -45,7 +45,7 @@ const PaymentPresenter = () => {
         {
             payments && 
             payments.length > 0 &&  
-            <Grid orders={payments} updatePayment={queryUpdatePayment}/>
+            <Grid orders={payments} updatePayment={queryUpdatePayment} deletePayment={queryDeletePayment}/>
         }
         </>
     )

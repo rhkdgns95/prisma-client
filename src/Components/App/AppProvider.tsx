@@ -2,14 +2,18 @@ import React, { createContext, useContext, useState } from 'react';
 
 interface IContext {
     loggedIn: boolean;
+    isHiddenNav: boolean;
     navigation: ILink | null;
     handleChangeNavigation: (navIndex: ILink) => void;
+    toggleIsHiddenNav: () => void;
 }
 
 const Context: IContext = {
     loggedIn: false,
+    isHiddenNav: false,
     navigation: null,
-    handleChangeNavigation: () => {}
+    handleChangeNavigation: () => {},
+    toggleIsHiddenNav: () => {}
 };
 
 
@@ -28,21 +32,29 @@ const AppContext: React.Context<IContext> = createContext<IContext>(Context);
 const useAppContext = () => useContext(AppContext);
 
 const useFetch = (): { value: IContext } => {
+    const [ loggedIn ] = useState<boolean>(true);
+    const [ isHiddenNav, setIsHiddenNav ] = useState<boolean>(false);
     const [ navigation, setNavigation ] = useState<ILink | null>(null);
     
+
+    const toggleIsHiddenNav = () => {
+        setIsHiddenNav(!isHiddenNav);
+    } 
+
     const handleChangeNavigation = (newNav: ILink) => {
         setNavigation(newNav);
     };
 
-    const [ loggedIn ] = useState<boolean>(true);
     // const [ navLeftLink ] = useState<>();
     // const [ topLinkGroup ] = useState<>();
     
     return {
         value: {
             loggedIn,
+            isHiddenNav,
             navigation,
-            handleChangeNavigation
+            handleChangeNavigation,
+            toggleIsHiddenNav
         }
     };
 };

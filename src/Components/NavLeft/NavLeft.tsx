@@ -1,34 +1,32 @@
 import React from 'react';
 import styled from '../../Styles/typed-components';
 import { Link } from 'react-router-dom';
-import { useAppContext } from '../App/AppProvider';
 import navigations from '../../navigations';
 
 interface IProps {
+    isHiddenNav: boolean;
     navWidth: number;
+    navigation: ILink | null;
 }
 
-const NavLeft: React.FC<IProps> = ({ navWidth }) => {
-    const { navigation }  = useAppContext();
-    console.log("NAvLeft: ", navigation);
-    
-    return (
-        <Container navWidth={navWidth}>
-            <Wrapper>
-                {
-                    navigation && 
-                    navigations.map((item, key) => 
-                        <LinkItem key={key} className={item.id === navigation.id ? "active" : ""}>
-                            <Link to={item.path}>{ item.name }</Link>
-                        </LinkItem>
-                    )  
-                }   
-                <LinkItem>
-                </LinkItem>
-            </Wrapper>
-        </Container>    
-    )
-};
+const NavLeft: React.FC<IProps> = ({ 
+    isHiddenNav,
+    navWidth,
+    navigation,
+ }) =>(
+    <Container navWidth={navWidth} className={isHiddenNav ? "active" : ""}>
+        <Wrapper>
+            {
+                navigation && 
+                navigations.map((item, key) => 
+                    <LinkItem key={key} className={item.id === navigation.id ? "active" : ""}>
+                        <Link to={item.path}>{ item.name }</Link>
+                    </LinkItem>
+                )  
+            }   
+        </Wrapper>
+    </Container>    
+ );
 
 interface IContainer {
     navWidth: number;
@@ -41,7 +39,12 @@ const Container = styled.div<IContainer>`
     height: 100%;
     overflow-y: auto;
     background-color: ${props => props.theme.navLeftColor};
+    opacity: 1;
     transition: .2s;
+    &.active {
+        margin-left: -${props => props.navWidth}px;
+        opacity: .5;
+    }
 `;
 const Wrapper = styled.div`
     display: flex;

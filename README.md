@@ -12,7 +12,7 @@
 - [x] Create DevExpress-Components Part 1.
 - [x] Create UpdatePayment.
 - [x] Subscription Payments.
-- [] Create DeletePayment.
+- [x] Create DeletePayment.
 
 ## Install
 - yarn create react-app ./ --template typescript

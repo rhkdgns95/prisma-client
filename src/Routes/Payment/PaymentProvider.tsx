@@ -1,17 +1,19 @@
 import React, { createContext, useContext, useEffect } from 'react';
 import { useQuery, useMutation, useSubscription } from 'react-apollo';
-import { GET_PAYMENTS, UPDATE_PAYMENT, SUBSCRIPTION_PAYMENTS } from './PaymentQueries';
+import { GET_PAYMENTS, UPDATE_PAYMENT, SUBSCRIPTION_PAYMENTS, DELETE_PAYMENT } from './PaymentQueries';
 import { SubscribeToMoreOptions } from 'apollo-boost';
 
 interface IContext {
     loadingGetPayments: boolean;
     payments: Array<IPayment>;
     queryUpdatePayment: () => any;
+    queryDeletePayment: () => any;
 }
 const Context: IContext = {
     payments: [],
     loadingGetPayments: false,
-    queryUpdatePayment: () => {}
+    queryUpdatePayment: () => {},
+    queryDeletePayment: () => {}
 }
 
 const PaymentContext: React.Context<IContext> = createContext(Context);
@@ -19,26 +21,11 @@ const PaymentContext: React.Context<IContext> = createContext(Context);
 const usePaymentContext = () => useContext(PaymentContext);
 
 const useFetch = (): { value: IContext } => {   
-    const { data: subscriptionPayments } = useSubscription(SUBSCRIPTION_PAYMENTS, {
-        variables: {
-            where: {
-                mutation_in: ['CREATED', 'UPDATED', 'DELETED']
-            }
-        },
-        onSubscriptionData: data => {
-            data.client.reFetchObservableQueries(true);
-        }
-    });
-
-    const [ queryUpdatePayment ] = useMutation(UPDATE_PAYMENT, {
-        onCompleted: data => {
-            // console.log("UpdatePayment onCompleted ", data)
-        },
-        onError: data => {
-            console.log("UpdatePayment onError ", data)
-        }
-    });
-
+   
+    
+    /**
+     *  [1] GetPayments
+     */
     const { data, loading: loadingGetPayments, subscribeToMore } = useQuery<{payments: Array<any> | [], payment: any}>(GET_PAYMENTS, {
         onCompleted: data => {
             // console.log("GetPayments onCompleted: ", data);
@@ -49,6 +36,43 @@ const useFetch = (): { value: IContext } => {
         fetchPolicy: "cache-and-network"
     });
 
+    /**
+     *  [2] UpdatePayment
+     */
+    const [ queryUpdatePayment ] = useMutation(UPDATE_PAYMENT, {
+        onCompleted: data => {
+            // console.log("UpdatePayment onCompleted ", data)
+        },
+        onError: data => {
+            console.log("UpdatePayment onError ", data)
+        }
+    });
+    /**
+     *  [3] DeletePayment
+     */
+    const [ queryDeletePayment, { data: deletedPayment }] = useMutation(DELETE_PAYMENT, {
+        onCompleted: data => {
+            console.log("DeletePayment onCompleted: ", data);
+        },
+        onError: data => {
+            console.log("DeletePayment onError: ", data);
+        }
+    });
+
+    /**
+     *  [4] Subscription Payment Actions - CREATED, UPDATED, DELETED
+     */
+    const { data: subscriptionPayments } = useSubscription(SUBSCRIPTION_PAYMENTS, {
+        variables: {
+            where: {
+                mutation_in: ['CREATED', 'UPDATED', 'DELETED']
+            }
+        },
+        onSubscriptionData: data => {
+            data.client.reFetchObservableQueries(true);
+        }
+    });
+    console.log("deletedPayment: ", deletedPayment);
     console.log("subscriptionPayments: ", subscriptionPayments);
 
     useEffect(() => {
@@ -86,7 +110,7 @@ const useFetch = (): { value: IContext } => {
                             break;
 
                         case "DELETED":  // 현 데이터에서 삭제된 값 찾아서 제거하면 됨.
-                            console.log("(Subscription) 데이터 삭제: ", subscriptionData.data.payment.node);
+                            console.log("(Subscription)데이터 삭제: ", subscriptionData.data.payment.node);
                             var updatedData = prev.payments.filter((payment: IPayment) => payment.tscode !== subscriptionData.data.payment.node.tscode);
                             updatePayments = [ 
                                 ...updatedData
@@ -124,7 +148,8 @@ const useFetch = (): { value: IContext } => {
         value: {
             loadingGetPayments,
             payments: data?.payments || [],
-            queryUpdatePayment
+            queryUpdatePayment,
+            queryDeletePayment
         }
     };
 };

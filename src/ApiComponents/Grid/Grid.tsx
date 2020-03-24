@@ -59,6 +59,7 @@ const status_tok = [
 interface IProps {
   orders: Array<IPayment>
   updatePayment: (data: any) => any;
+  deletePayment: (data: any) => any;
 }
 
 interface IState {
@@ -249,7 +250,8 @@ class Grid extends React.Component<IProps, IState> {
           text="Delete Selected Records"
           height={34}
           disabled={!this.state.selectedItemKeys.length}
-          onClick={this.deleteRecords} />
+          onClick={this.deleteRecords} 
+        />
 
         
         <DataGrid id="gridContainer"
@@ -287,7 +289,14 @@ class Grid extends React.Component<IProps, IState> {
           onEditorPrepared={data => {
             // console.log("DATA: ", data);
             return data;
-          }}>
+          }}
+          // onRowRemoving={data => {
+          //   console.log("onRowRemoving: ", data);
+          // }}  
+          onRowRemoved={data => {
+            console.log("onRowRemoved: ", data);
+          }}
+        >
         <Selection mode="multiple" />
         <Paging 
             defaultPageSize={this.defaultPageSize} 
@@ -628,16 +637,27 @@ class Grid extends React.Component<IProps, IState> {
    *  
    *  - 데이터를 삭제 했을경우, 발생하는 이벤트
    */
-  deleteRecords() {
+  deleteRecords(data: any) {
+    console.log("DELETE: ", data);
     const isConfirm = window.confirm("삭제하시겠습니까?");
-    console.log("삭제될 키값: ", this.state.selectedItemKeys);
+    
     if(isConfirm) {
-      this.state.selectedItemKeys.forEach((selectedItem) => {
-        const newOrders = this.props.orders.filter(item => item.tscode !== selectedItem.tscode);
-        // this.setState({
-        //   orders: newOrders
-        // })
-        console.log("newOrders: ", newOrders);
+      // console.log("삭제될 키값: ", this.state.selectedItemKeys);
+
+      this.state.selectedItemKeys.forEach((selectedPayment) => {
+        // const newOrders = this.props.orders.filter(item => item.tscode !== selectedItem.tscode);
+        // console.log("newOrders: ", newOrders);
+
+        // console.log("selectedItem: ", selectedItem);
+
+        this.props.deletePayment({
+          variables: {
+            where: {
+              tscode: selectedPayment.tscode
+            }
+          }
+        });
+        
       });
       this.setState({
         selectedItemKeys: []

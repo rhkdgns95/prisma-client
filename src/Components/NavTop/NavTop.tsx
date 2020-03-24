@@ -1,25 +1,38 @@
 import React from 'react';
 import styled from '../../Styles/typed-components';
-import { useAppContext } from '../App/AppProvider';
+import { Button } from "devextreme-react";
 
 interface IProps {
+    isHiddenNav: boolean;
     navHeight: number;
+    navigation: ILink | null;
+    toggleIsHiddenNav: () => void;
 }
 
-const NavbarTopContainer: React.FC<IProps> = ({ navHeight }) => {
+const NavbarTopContainer: React.FC<IProps> = ({ 
+    isHiddenNav,
+    navHeight,
+    navigation,
+    toggleIsHiddenNav,
+}) => (
+    <Container navHeight={navHeight}>
+        <Wrapper className={"dx-field"}>
+            <Text>
+                <Button 
+                    icon="back"
+                    onClick={toggleIsHiddenNav} 
+                    style={{
+                        transform: isHiddenNav ? "rotateY(-180deg)" : "",
+                        marginRight: 10,
+                        transition: ".2s"
+                    }}    
+                />
+                DashBoard > <strong>{ navigation?.name }</strong>
+            </Text>
 
-    const { navigation } = useAppContext();
-
-    return (
-        <Container navHeight={navHeight}>
-            <Wrapper>
-                <Text>
-                    DashBoard > <strong>{ navigation?.name }</strong>
-                </Text>
-            </Wrapper>
-        </Container>
-    );
-}
+        </Wrapper>
+    </Container>
+);
 
 interface IContainer {
     navHeight: number;
