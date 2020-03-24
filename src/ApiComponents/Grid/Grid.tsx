@@ -62,7 +62,6 @@ interface IProps {
 }
 
 interface IState {
-  orders: Array<IPayment>;
   showFilterRow: any;
   showHeaderFilter: any;
   currentFilter: any;  
@@ -94,9 +93,7 @@ class Grid extends React.Component<IProps, IState> {
 
     constructor(props: IProps) {
     super(props);
-    const { orders } = props;
     this.state = {
-      orders,
       showFilterRow: true,
       showHeaderFilter: true,
       currentFilter: 1,
@@ -108,7 +105,7 @@ class Grid extends React.Component<IProps, IState> {
       isGridDetails: false
     };
     console.log("props: ", props);
-    console.log("this.orders: ", this.state.orders);
+    console.log("this.orders: ", this.props.orders);
     this.defaultPageSize = 10;
 
     // 데이터 바뀌면, 아래 orders는 dataSource와 다르게 넣어줄 것.
@@ -257,7 +254,7 @@ class Grid extends React.Component<IProps, IState> {
         
         <DataGrid id="gridContainer"
           ref={(ref) => this.dataGrid = ref}
-          dataSource={this.state.orders}
+          dataSource={this.props.orders}
           showBorders={true}
           allowColumnResizing={true}
           selectedRowKeys={this.state.selectedItemKeys}
@@ -636,10 +633,11 @@ class Grid extends React.Component<IProps, IState> {
     console.log("삭제될 키값: ", this.state.selectedItemKeys);
     if(isConfirm) {
       this.state.selectedItemKeys.forEach((selectedItem) => {
-        const newOrders = this.state.orders.filter(item => item.tscode !== selectedItem.tscode);
-        this.setState({
-          orders: newOrders
-        })
+        const newOrders = this.props.orders.filter(item => item.tscode !== selectedItem.tscode);
+        // this.setState({
+        //   orders: newOrders
+        // })
+        console.log("newOrders: ", newOrders);
       });
       this.setState({
         selectedItemKeys: []

@@ -11,6 +11,8 @@
 - [x] Layout + Navigation.
 - [x] Create DevExpress-Components Part 1.
 - [x] Create UpdatePayment.
+- [x] Subscription Payments.
+- [] Create DeletePayment.
 
 ## Install
 - yarn create react-app ./ --template typescript
@@ -18,3 +20,5 @@
 - yarn add react-router-dom @types/react-router-dom
 - yarn add styled-components @types/styled-components
 - yarn add devextreme devextreme-react
+- yarn add apollo-link-ws subscriptions-transport-ws
+- yarn add apollo-link apollo-link-http apollo-utilities apollo-client apollo-cache-inmemory

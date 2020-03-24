@@ -1,6 +1,7 @@
-import React, { createContext, useContext } from 'react';
-import { useQuery, useMutation } from 'react-apollo';
-import { GET_PAYMENTS, UPDATE_PAYMENT } from './PaymentQueries';
+import React, { createContext, useContext, useEffect } from 'react';
+import { useQuery, useMutation, useSubscription } from 'react-apollo';
+import { GET_PAYMENTS, UPDATE_PAYMENT, SUBSCRIPTION_PAYMENTS } from './PaymentQueries';
+import { SubscribeToMoreOptions } from 'apollo-boost';
 
 interface IContext {
     loadingGetPayments: boolean;
@@ -17,29 +18,112 @@ const PaymentContext: React.Context<IContext> = createContext(Context);
 
 const usePaymentContext = () => useContext(PaymentContext);
 
-const useFetch = (): { value: IContext } => {
-const [ queryUpdatePayment, { data: updatePaymentData } ] = useMutation(UPDATE_PAYMENT, {
+const useFetch = (): { value: IContext } => {   
+    const { data: subscriptionPayments } = useSubscription(SUBSCRIPTION_PAYMENTS, {
+        variables: {
+            where: {
+                mutation_in: ['CREATED', 'UPDATED', 'DELETED']
+            }
+        },
+        onSubscriptionData: data => {
+            data.client.reFetchObservableQueries(true);
+        }
+    });
+
+    const [ queryUpdatePayment ] = useMutation(UPDATE_PAYMENT, {
         onCompleted: data => {
-            console.log("UpdatePayment onCompleted ", data)
+            // console.log("UpdatePayment onCompleted ", data)
         },
         onError: data => {
             console.log("UpdatePayment onError ", data)
         }
     });
-    const { data, loading: loadingGetPayments }: any = useQuery<Array<any>>(GET_PAYMENTS, {
+
+    const { data, loading: loadingGetPayments, subscribeToMore } = useQuery<{payments: Array<any> | [], payment: any}>(GET_PAYMENTS, {
         onCompleted: data => {
-            console.log("GetPayments onCompleted: ", data);
+            // console.log("GetPayments onCompleted: ", data);
         },
         onError: data => {
             console.log("GetPayments onError: ", data);
-        }
+        },
+        fetchPolicy: "cache-and-network"
     });
-    console.log("updatePaymentData: ", updatePaymentData);
+
+    console.log("subscriptionPayments: ", subscriptionPayments);
+
+    useEffect(() => {
+        const subscribeToMoreOptions: SubscribeToMoreOptions = {
+            document: SUBSCRIPTION_PAYMENTS,
+            variables: {
+                where: {
+                    mutation_in: ['CREATED', 'UPDATED', 'DELETED']
+                }
+            },
+            updateQuery: (prev, { subscriptionData }) => {
+                if(!subscriptionData.data) {
+                    return prev;
+                }
+                // console.log("updateQuery Start: ")
+                if(subscriptionData.data.payment && subscriptionData.data.payment.mutation && subscriptionData.data.payment.node) {
+                    let updatePayments;   // 새로 업데이트 될 payments.
+                    const { mutation } = subscriptionData.data.payment;
+                    switch(mutation) {   
+                        case "CREATED":   // 현 데이터에서 새 데이터 값 추가하면 됨.
+                            console.log("(Subscription)데이터 추가: ", subscriptionData.data.payment.node);
+                            updatePayments = [
+                                ...prev.payments,
+                                subscriptionData.data.payment.node
+                            ];
+                            break;
+
+                        case "UPDATED":   // 현 데이터에서 업데이트 값 변경해주면 됨.
+                            console.log("(Subscription)데이터 업데이트: ", subscriptionData.data.payment.node);
+                            var updatedData = prev.payments.filter((payment: IPayment) => payment.tscode !== subscriptionData.data.payment.node.tscode);
+                            updatePayments = [ 
+                                ...updatedData, 
+                                subscriptionData.data.payment.node
+                            ];
+                            break;
+
+                        case "DELETED":  // 현 데이터에서 삭제된 값 찾아서 제거하면 됨.
+                            console.log("(Subscription) 데이터 삭제: ", subscriptionData.data.payment.node);
+                            var updatedData = prev.payments.filter((payment: IPayment) => payment.tscode !== subscriptionData.data.payment.node.tscode);
+                            updatePayments = [ 
+                                ...updatedData
+                            ];
+                            break;
+
+                        default:
+                            return prev;
+                    };
+                    
+                    if(updatePayments.length <= 0) { 
+                        return prev; 
+                    }
+
+                    const updated = Object.assign({}, {
+                        payments: updatePayments
+                    });
+
+                    // console.log("updated: ", updated);
+                    return updated as any;
+                  
+                } else {
+                    return prev;
+                }
+            }
+        };
+
+        subscribeToMore(subscribeToMoreOptions);
+    }, []);
+
     console.log("useFetch: ", data);
+    
+    // const payments: any  = data &&data?.payments || [];
     return {
         value: {
             loadingGetPayments,
-            payments: data ? data.payments : [],
+            payments: data?.payments || [],
             queryUpdatePayment
         }
     };

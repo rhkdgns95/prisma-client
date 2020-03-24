@@ -10,12 +10,16 @@ export const GET_PAYMENTS = gql`
     ${FragmentPayment}
 `;
 
+/**
+ *  handleUpdatePayments
+ *  
+ *  값이 변경된 모든 행들을 한번의 요청으로
+ *  변경하는 함수.
+ * 
+ *  @param items: 업데이트 할 Grid의 Rows
+ */
 export const handleUpdatePayments = (items: Array<any>) => {
     console.log("ITEMS: ", items);
-
-    // return gql`
-    //     ${}
-    // `;
 }
 
 export const UPDATE_PAYMENT = gql`
@@ -28,18 +32,13 @@ export const UPDATE_PAYMENT = gql`
 `;
 
 export const SUBSCRIPTION_PAYMENTS = gql`
-    subscription SubscriptionPayment {
-        payment(where: {
-            mutation_in: [CREATED UPDATED DELETED]
-        }) {
+    subscription SubscriptionPayment($where: PaymentSubscriptionWhereInput) {
+        payment(where: $where) {
             mutation
             node {
                 ...ItemPayment
             }
             updatedFields
-            previousValues {
-                ...ItemPayment
-            }
         }
     }
     ${FragmentPayment}
