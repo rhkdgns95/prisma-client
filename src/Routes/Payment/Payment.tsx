@@ -14,7 +14,6 @@ const Payment: React.FC<IProps> = ({ match: { path }}) => {
     useEffect(() => {
         if(path) {
             const newNav: ILink | null = navigations.find(item => item.path === path) || null;
-            console.log("newNav: ", newNav);
             if(newNav) {
                 handleChangeNavigation(newNav);    
             }
@@ -26,19 +25,21 @@ const Payment: React.FC<IProps> = ({ match: { path }}) => {
             <PaymentPresenter />
         </PaymentProvider>
     );
-}
+};
+
 const PaymentPresenter = () => {
-    const { loadingGetPayments, payments } = usePaymentContext();
+    const { loadingGetPayments, payments, queryUpdatePayment } = usePaymentContext();
     return (
         <>
         {
             loadingGetPayments ? "Loading..." :
                 <>
-                    <Grid orders={payments} />
+                    <Grid orders={payments} updatePayment={queryUpdatePayment}/>
                 </>
         }
             {/* <Grid orders={service.getNewOrders()}/> */}
         </>
     )
-}
+};
+
 export default Payment;

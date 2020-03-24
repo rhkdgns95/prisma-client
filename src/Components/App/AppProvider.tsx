@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState } from 'react';
+
 interface IContext {
     loggedIn: boolean;
     navigation: ILink | null;

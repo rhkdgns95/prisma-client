@@ -55,6 +55,12 @@ const status_tok = [
  *  - pageSize: 테이블에 보이는 row갯수.
  *
  */
+
+interface IProps {
+  orders: Array<IPayment>
+  updatePayment: (data: any) => any;
+}
+
 interface IState {
   orders: Array<IPayment>;
   showFilterRow: any;
@@ -77,11 +83,6 @@ const resizingModes: Array<'nextColumn' | 'widget'> = ['nextColumn', 'widget'];
 //     key: 'ID'
 //   })
 // });
-
-interface IProps {
-  orders: Array<IPayment>
-}
-
 class Grid extends React.Component<IProps, IState> {
 
     applyFilterTypes: any;
@@ -270,6 +271,18 @@ class Grid extends React.Component<IProps, IState> {
             // Table 전체 행 업데이트 중 실행됨. 
             // newData와 oldData를 제공해줌.
             // 저장 클릭 시 해당 이벤트가 실행됨.
+            const { updatePayment } = this.props;
+            const { newData, oldData: { tscode }} = data;
+            updatePayment({
+              variables: {
+                data: {
+                  ...newData
+                },
+                where: {
+                  tscode
+                }
+              }
+            });
 
             console.log("onRowUpdating: ", data);
             return data;

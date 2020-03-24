@@ -10,6 +10,7 @@
 - [x] Routes, Theme, styled-components.
 - [x] Layout + Navigation.
 - [x] Create DevExpress-Components Part 1.
+- [x] Create UpdatePayment.
 
 ## Install
 - yarn create react-app ./ --template typescript
