@@ -271,14 +271,14 @@ class Grid extends React.Component<IProps, IState> {
             // newData와 oldData를 제공해줌.
             // 저장 클릭 시 해당 이벤트가 실행됨.
             const { updatePayment } = this.props;
-            const { newData, oldData: { tscode }} = data;
+            const { newData, oldData: { id }} = data;
             updatePayment({
               variables: {
                 data: {
                   ...newData
                 },
                 where: {
-                  tscode
+                  id
                 }
               }
             });
@@ -371,9 +371,9 @@ class Grid extends React.Component<IProps, IState> {
           <Column 
             width="auto"
             alignment="right"
-            dataField="tscode"
+            dataField="id"
             allowEditing={false}
-            caption="U_ID(tscode)">
+            caption="U_ID(id)">
             <HeaderFilter allowSearch={true} />
           </Column>
           <Column 
@@ -559,7 +559,7 @@ class Grid extends React.Component<IProps, IState> {
           {/* [1] 칼럼 종료함. */}
           <Summary>
             <TotalItem
-              column="tscode"
+              column="id"
               summaryType="count" />
             <TotalItem
               column="tnumber"
@@ -645,7 +645,7 @@ class Grid extends React.Component<IProps, IState> {
       // console.log("삭제될 키값: ", this.state.selectedItemKeys);
 
       this.state.selectedItemKeys.forEach((selectedPayment) => {
-        // const newOrders = this.props.orders.filter(item => item.tscode !== selectedItem.tscode);
+        // const newOrders = this.props.orders.filter(item => item.id !== selectedItem.id);
         // console.log("newOrders: ", newOrders);
 
         // console.log("selectedItem: ", selectedItem);
@@ -653,7 +653,7 @@ class Grid extends React.Component<IProps, IState> {
         this.props.deletePayment({
           variables: {
             where: {
-              tscode: selectedPayment.tscode
+              id: selectedPayment.id
             }
           }
         });

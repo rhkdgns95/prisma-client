@@ -32,6 +32,7 @@ interface IContainer {
     navWidth: number;
 }
 const Container = styled.div<IContainer>`
+    z-index: 2;
     position: fixed;
     top: 0;
     left: 0;

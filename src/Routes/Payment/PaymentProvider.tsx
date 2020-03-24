@@ -102,7 +102,7 @@ const useFetch = (): { value: IContext } => {
 
                         case "UPDATED":   // 현 데이터에서 업데이트 값 변경해주면 됨.
                             console.log("(Subscription)데이터 업데이트: ", subscriptionData.data.payment.node);
-                            var updatedData = prev.payments.filter((payment: IPayment) => payment.tscode !== subscriptionData.data.payment.node.tscode);
+                            var updatedData = prev.payments.filter((payment: IPayment) => payment.id !== subscriptionData.data.payment.node.id);
                             updatePayments = [ 
                                 ...updatedData, 
                                 subscriptionData.data.payment.node
@@ -111,7 +111,7 @@ const useFetch = (): { value: IContext } => {
 
                         case "DELETED":  // 현 데이터에서 삭제된 값 찾아서 제거하면 됨.
                             console.log("(Subscription)데이터 삭제: ", subscriptionData.data.payment.node);
-                            var updatedData = prev.payments.filter((payment: IPayment) => payment.tscode !== subscriptionData.data.payment.node.tscode);
+                            var updatedData = prev.payments.filter((payment: IPayment) => payment.id !== subscriptionData.data.payment.node.id);
                             updatePayments = [ 
                                 ...updatedData
                             ];

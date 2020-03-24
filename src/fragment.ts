@@ -2,7 +2,7 @@ import { gql } from "apollo-boost";
 
 export const FragmentPayment = gql`
     fragment ItemPayment on Payment {
-        tscode
+        id
         tok
         tnumber
         mname

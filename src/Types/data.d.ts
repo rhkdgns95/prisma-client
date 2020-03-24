@@ -1,5 +1,5 @@
 interface IPayment {
-    tscode: number;
+    id: string;
     tok: string;
     tnumber: number;
     mname: string;

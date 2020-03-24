@@ -13,7 +13,7 @@
 - [x] Create UpdatePayment.
 - [x] Subscription Payments.
 - [x] Create DeletePayment.
-- [] App Title.
+- [x] Setting App Title.
 
 
 ## Install
@@ -24,3 +24,6 @@
 - yarn add devextreme devextreme-react
 - yarn add apollo-link-ws subscriptions-transport-ws
 - yarn add apollo-link apollo-link-http apollo-utilities apollo-client apollo-cache-inmemory
+
+## Deploy
+- now 배포시, [name명]을  package.json에 작성.
