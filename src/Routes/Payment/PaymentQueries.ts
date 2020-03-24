@@ -29,6 +29,15 @@ export const handleUpdatePayments = (items: Array<any>) => {
     console.log("ITEMS: ", items);
 }
 
+export const CREATE_PAYMENT = gql`
+    mutation CreatePayment($data: PaymentCreateInput!) {
+        createPayment(data: $data) {
+            ...ItemPayment
+        }
+    }
+    ${FragmentPayment}
+`;
+
 export const UPDATE_PAYMENT = gql`
     mutation UpdatePayment($data: PaymentUpdateInput! $where: PaymentWhereUniqueInput!) {
         updatePayment(data: $data where: $where) {

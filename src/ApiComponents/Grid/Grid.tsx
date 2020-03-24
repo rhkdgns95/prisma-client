@@ -165,6 +165,9 @@ class Grid extends React.Component<IProps, IState> {
   render() {
     return (
       <div className={"api-container"}>
+        <button onClick={e => alert("comming soon....")}>
+          New
+        </button>
         <button onClick={this.toggleGridTableDetails} style={{
             backgroundColor: "white",
             padding: "5px 7px",
