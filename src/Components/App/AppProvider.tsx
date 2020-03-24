@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 
 interface IContext {
     loggedIn: boolean;
@@ -36,6 +36,13 @@ const useFetch = (): { value: IContext } => {
     const [ isHiddenNav, setIsHiddenNav ] = useState<boolean>(false);
     const [ navigation, setNavigation ] = useState<ILink | null>(null);
     
+    useEffect(() => {
+
+        // Navigation에 따라서, web title값 수정 - Login된 경우만 실행 됨.
+        if(navigation) {
+            window.document.title = `Careda | ${navigation.name}`;
+        }
+    }, [navigation]);
 
     const toggleIsHiddenNav = () => {
         setIsHiddenNav(!isHiddenNav);

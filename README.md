@@ -13,6 +13,8 @@
 - [x] Create UpdatePayment.
 - [x] Subscription Payments.
 - [x] Create DeletePayment.
+- [] App Title.
+
 
 ## Install
 - yarn create react-app ./ --template typescript
