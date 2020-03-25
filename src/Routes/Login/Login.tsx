@@ -24,7 +24,8 @@ const LoginPresenter = () => {
 }
 
 const Container = styled.div`
-    height: 100%;
+    height: 100vh;
+    min-height: 100%;
 `;
 
 const Wrapper = styled.div`

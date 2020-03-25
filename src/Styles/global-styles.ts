@@ -23,7 +23,7 @@ const GlobalStyles = createGlobalStyle`
         color: inherit;
     }
     #root {
-        // height: 100%;
+        height: 100%;
         background-color: ${props => props.theme.bgColor};
     }
     .api-container {
