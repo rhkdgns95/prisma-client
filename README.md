@@ -17,7 +17,10 @@
 - [x] Add New Payment.
 - [x] Login.
 - [x] Grid Table.
-- [] Add New Payment - Bug Found (새 Payment 추가시, requried가 아닌 경우에는 Validation을 하지 않음.)
+- [x] Edit column set required.
+
+## Bugs
+- [ ] Add New Payment - Bug Found (새 Payment 추가시, requried가 아닌 경우에는 Validation을 하지 않음.)
 
 ## Install
 - yarn create react-app ./ --template typescript
@@ -30,3 +33,5 @@
 
 ## Deploy
 - now 배포시, [name명]을  package.json에 작성.
+- git push시 배포된 곳에서 자동으로 코드 실행.
+- https://iconmonstr.com/arrow-64-svg/

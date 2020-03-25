@@ -47,6 +47,17 @@ const Container = styled.div<IContainer>`
         opacity: .5;
     }
     box-shadow: 0 5px 10px rgba(0,0,0,.72);
+    // border-right: 2.5px solid #3d67d4;
+    &::after {
+        content: "";
+        position: absolute;
+        display: block;
+        top: 0;
+        right: 0;
+        height: 100%;
+        width: 3px;
+        background-color: #3d67d4;
+    }
 `;
 const Wrapper = styled.div`
     display: flex;
@@ -67,7 +78,7 @@ const LinkItem = styled.div`
         left: 50%;
         transform: translateX(-50%);
         height: 100%;
-        background-color: #438eff;
+        // background-color: #438eff;
         width: 0;
     }
     & > a {
@@ -88,14 +99,16 @@ const LinkItem = styled.div`
     }
     
     &.active {
-        background-color: #4a4a4a;
+        // background-color: #4a4a4a;
         &::before {
             width: 100%;
+            background-color: #3d67d4;
             transition: .3s ease-in-out;
         }
         & > a {
-            background-color: #3d67d4;
-            transition: .3s ease-in-out;
+            background-color: none;
+            // background-color: #3d67d4;
+            // transition: .3s ease-in-out;
         }
     }
 `;

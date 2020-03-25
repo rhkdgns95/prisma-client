@@ -1,5 +1,5 @@
 import React from 'react';
-import DataGrid, { Column, HeaderFilter, Editing, Selection, Paging, Pager, Export, FilterRow, SearchPanel, Summary, TotalItem, Lookup, Popup, Position, Form } from 'devextreme-react/data-grid';
+import DataGrid, { Column, HeaderFilter, Editing, Selection, Paging, Pager, Export, FilterRow, SearchPanel, Summary, TotalItem, Lookup, Popup, Position, Form, RequiredRule } from 'devextreme-react/data-grid';
 import { SelectBox, 
   // CheckBox, 
   Button, 
@@ -8,6 +8,7 @@ import { SelectBox,
 import { Item } from 'devextreme-react/form';
 import Title from '../../../Components/Title';
 import { cleanNullArgs } from '../../../Utils/cleanNullArgs';
+import { isEmptyObject } from '../../../Utils/isEmptyObject';
 
 // import service from './data';
 // import DataSource from 'devextreme/data/data_source';
@@ -367,7 +368,8 @@ class GridPayment extends React.Component<IProps, IState> {
               const { newData, oldData: { id }} = data;
               const notNullData = cleanNullArgs(newData);
 
-              if(notNullData) { // 업데이트할 데이터를 NULL값으로 둔 경우,
+              if(notNullData && !isEmptyObject(notNullData)) { // 업데이트할 데이터를 NULL값으로 둔 경우(NULL과 비어있는 객체인지 체크해야함)
+                console.log("notNullData: ", notNullData);
                 updatePayment({
                   variables: {
                     data: {
@@ -378,6 +380,8 @@ class GridPayment extends React.Component<IProps, IState> {
                     }
                   }
                 });
+              } else {
+                return;
               }
               
               // console.log("onRowUpdating: ", data);
@@ -416,7 +420,8 @@ class GridPayment extends React.Component<IProps, IState> {
             allowedPageSizes={[]}
             infoText={
               (currentIdx: number, totalIdx: number, totalCnt: number) => {
-                return `현재_커서_${currentIdx} / 마지막_커서_${totalIdx} / 전체_데이터_${totalCnt}`;
+                // return `${currentIdx} / 마지막_커서_${totalIdx} / 전체_데이터_${totalCnt}`;
+                return `Page ${currentIdx} of ${totalIdx} (${totalCnt} items)`;
               }
             }
             showInfo={true} 
@@ -500,6 +505,7 @@ class GridPayment extends React.Component<IProps, IState> {
               dataField="mname"
               caption="성명(mname)">
               <HeaderFilter allowSearch={true} />
+              <RequiredRule />
             </Column>
             <Column 
               width="auto"
@@ -507,6 +513,7 @@ class GridPayment extends React.Component<IProps, IState> {
               dataField="mid"
               caption="아이디(mid)">
               <HeaderFilter allowSearch={true} />
+              <RequiredRule />
             </Column>
             <Column 
               width="auto"
@@ -518,6 +525,7 @@ class GridPayment extends React.Component<IProps, IState> {
               editorOptions={this.saleAmountHeaderFilter}
               >
               <HeaderFilter allowSearch={true} dataSource={this.saleAmountHeaderFilter}/>
+              <RequiredRule />
             </Column>
             <Column 
               visible={this.state.showDetailRow}
@@ -599,6 +607,7 @@ class GridPayment extends React.Component<IProps, IState> {
               dataField="accea"
               caption="기본형 신청계좌 수(accea)">
               <HeaderFilter allowSearch={true} />
+              <RequiredRule />
             </Column>
             <Column 
               width="auto"
@@ -606,6 +615,7 @@ class GridPayment extends React.Component<IProps, IState> {
               dataField="qaccea"
               caption="퀵형 신청계좌 수(qaccea)">
               <HeaderFilter allowSearch={true} />
+              <RequiredRule />
             </Column>
             <Column 
               allowEditing={false}
