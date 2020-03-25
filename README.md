@@ -14,6 +14,8 @@
 - [x] Subscription Payments.
 - [x] Create DeletePayment.
 - [x] Setting App Title.
+- [x] Add New Payment.
+- [] Login.
 
 
 ## Install

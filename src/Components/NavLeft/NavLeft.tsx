@@ -46,6 +46,7 @@ const Container = styled.div<IContainer>`
         margin-left: -${props => props.navWidth}px;
         opacity: .5;
     }
+    box-shadow: 0 5px 10px rgba(0,0,0,.72);
 `;
 const Wrapper = styled.div`
     display: flex;

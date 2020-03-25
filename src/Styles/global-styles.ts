@@ -25,6 +25,15 @@ const GlobalStyles = createGlobalStyle`
     .api-container {
         width: 100%;
     }
+    #form_payment {
+        background-color: #dfdfdf;
+        .dx-datagrid-header-panel {
+            border: 0;
+        }
+        .dx-datagrid-rowsview {
+            height: 0;
+        }
+    }
 `;
 
 export default GlobalStyles;
