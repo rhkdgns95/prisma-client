@@ -362,18 +362,24 @@ class GridPayment extends React.Component<IProps, IState> {
               // Table 전체 행 업데이트 중 실행됨. 
               // newData와 oldData를 제공해줌.
               // 저장 클릭 시 해당 이벤트가 실행됨.
+              
               const { updatePayment } = this.props;
               const { newData, oldData: { id }} = data;
-              updatePayment({
-                variables: {
-                  data: {
-                    ...newData
-                  },
-                  where: {
-                    id
+              const notNullData = cleanNullArgs(newData);
+
+              if(notNullData) { // 업데이트할 데이터를 NULL값으로 둔 경우,
+                updatePayment({
+                  variables: {
+                    data: {
+                      ...newData
+                    },
+                    where: {
+                      id
+                    }
                   }
-                }
-              });
+                });
+              }
+              
               // console.log("onRowUpdating: ", data);
               return data;
             }}
@@ -765,12 +771,12 @@ class GridPayment extends React.Component<IProps, IState> {
         // const newOrders = this.props.orders.filter(item => item.id !== selectedItem.id);
         // console.log("newOrders: ", newOrders);
 
-        // console.log("selectedItem: ", selectedItem);
+        // console.log("selectedPayment: ", selectedPayment);
 
         this.props.deletePayment({
           variables: {
             where: {
-              id: selectedPayment.id
+              id: selectedPayment
             }
           }
         });
