@@ -24,10 +24,18 @@ const GlobalStyles = createGlobalStyle`
     }
     #root {
         height: 100%;
+        background-color: ${props => props.theme.bgColor};
     }
     .api-container {
         width: 100%;
     }
+    .api-wrapper {
+        background-color: white;
+        padding: 40px 20px;
+        box-shadow: 0 2px 4px rgba(0,0,0,.22);
+        border: 3px;
+    }
+
     #form_payment {
         background-color: #dfdfdf;
         .dx-datagrid-header-panel {

@@ -16,7 +16,8 @@
 - [x] Setting App Title.
 - [x] Add New Payment.
 - [x] Login.
-
+- [x] Grid Table.
+- [] Add New Payment - Bug Found (새 Payment 추가시, requried가 아닌 경우에는 Validation을 하지 않음.)
 
 ## Install
 - yarn create react-app ./ --template typescript

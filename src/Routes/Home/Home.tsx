@@ -31,7 +31,7 @@ const HomePresenter = () => {
     
     return (
         <>
-            Hello Home.
+            Home
         </>
     );
 }

@@ -94,7 +94,7 @@ const LinkItem = styled.div`
             transition: .3s ease-in-out;
         }
         & > a {
-            background-color: #5f57dc;
+            background-color: #3d67d4;
             transition: .3s ease-in-out;
         }
     }

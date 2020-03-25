@@ -1,7 +1,7 @@
 export const theme: ITheme = {
-    bgColor: "gray",
+    bgColor: "#f4f6f5",
     navLeftColor: "#333333",
-    navTopColor: "#f4f6f5",
+    navTopColor: "#ffffff",
     failedColor: "blue",
     successColor: "red"
 };

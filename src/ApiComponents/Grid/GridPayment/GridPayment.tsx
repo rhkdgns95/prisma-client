@@ -6,6 +6,8 @@ import { SelectBox,
   CheckBox,
 } from 'devextreme-react';
 import { Item } from 'devextreme-react/form';
+import Title from '../../../Components/Title';
+import { cleanNullArgs } from '../../../Utils/cleanNullArgs';
 
 // import service from './data';
 // import DataSource from 'devextreme/data/data_source';
@@ -58,6 +60,7 @@ interface IState {
   showHeaderFilter: any;
   currentFilter: any;  
   pageSize: number;    
+  showDetailRow: boolean;
   isGridDetails: boolean;
   selectTextOnEditStart: boolean;
   startEditAction: 'click' | 'dblClick';
@@ -93,6 +96,7 @@ class GridPayment extends React.Component<IProps, IState> {
     constructor(props: IProps) {
     super(props);
     this.state = {
+      showDetailRow: false,
       showFilterRow: true,
       showHeaderFilter: true,
       currentFilter: 1,
@@ -164,502 +168,540 @@ class GridPayment extends React.Component<IProps, IState> {
     return (
       <div className={"api-container"}>
         {/* <FormCreatePayment /> */}
-
-
-        
+        <Title name="결제내역"/>
+        <div className={"api-wrapper"}>
         {/* 새 칼럼 추가 - 시작 */}
-        <DataGrid
-          id="form_payment"
-          dataSource={{}}
-          keyExpr="ID"
-          showColumnHeaders={false}
-          onRowInserting={newPayment => {
-            // 데이터가 추가될때 발생하는 이벤트.
-            const { data } = newPayment;
-            delete data.__KEY__;
-            this.props.createPayment({
-              variables: {
-                data
-              }
-            });
+          <DataGrid
+            id="form_payment"
+            dataSource={{}}
+            keyExpr={"id"}
+            showColumnHeaders={false}
+            onRowInserting={newPayment => {
+              // 데이터가 추가될때 발생하는 이벤트.
+              const { data: addedData } = newPayment;
+              console.log("newPayment: ", newPayment);
 
-            console.log("DATA: ", newPayment.data);
-          }}
-        >
-          <Paging enabled={false} />
-          <Editing
-            mode="popup"
-            allowAdding="true">
-            <Popup title="New Payment" showTitle={true} width={700} height={'auto'}>
-              <Position my={{x: 5, y: 5}} at={{x: 10, y: 10}} of={window} />
-            </Popup>
-            <Form>
-              <Item itemType="group" caption="Info" colCount={2} colSpan={2}>
-                <Item dataField="tok" isRequired/>
-                <Item dataField="mname" isRequired />
-                <Item dataField="mid" isRequired />
-                <Item dataField="spay" isRequired/>
-                <Item dataField="reg_date" />
-                <Item dataField="pay_dtm" />
-                <Item dataField="bpay"/>
-                <Item dataField="qpay"/>
-                <Item dataField="accea" isRequired/>
-                <Item dataField="qaccea" isRequired/>
-              </Item>
+              delete addedData.__KEY__;
+              const data = cleanNullArgs(addedData);
 
-              <Item itemType="group" caption="Details" colCount={2} colSpan={2}>
-                <Item
-                  dataField="content"
-                  editorType="dxTextArea"
-                  colSpan={2}
-                  editorOptions={{ height: 100 }} />
-              </Item>
-            </Form>
-          </Editing>
-          <Column dataField="tok" caption="구분(tok)" dataType="string" width={125} visible={false} >
-            <Lookup dataSource={states} valueExpr="name" displayExpr="name" />
-          </Column>
-          <Column dataField="mname" caption="성명(mname)" dataType="string" visible={false}/>
-          <Column dataField="mid" caption="아이디(mid)" dataType="string" visible={false}/>
-          <Column dataField="spay" caption="결제금액(spay)" dataType="number" visible={false}/>
-          <Column dataField="reg_date" caption="가입일시(reg_date)" dataType="date" visible={false}/>
-          <Column dataField="pay_dtm" caption="결제일시(pay_dtm)" dataType="date" visible={false}/>
-          <Column dataField="bpay" caption="금액(bpay)" dataType="number" visible={false}/>
-          <Column dataField="qpay" caption="(퀵)금액(qpay)" dataType="number" visible={false}/>
-          <Column dataField="accea" caption="갯수(accea)" dataType="number" visible={false}/>
-          <Column dataField="qaccea" caption="(퀵)갯수(qaccea)" dataType="number" visible={false}/>
-          <Column dataField="content" caption="내용(content)" dataType="string" visible={false} />
-        </DataGrid>
-        {/* 새 칼럼 추가 - 종료 */}
+              console.log("update newPayment: ", data);
+
+              this.props.createPayment({
+                variables: {
+                  data
+                }
+              });
+              
+              
+            }}
+          >
+            <Paging enabled={false} />
+            <Editing
+              mode="popup"
+              allowAdding="true">
+              <Popup title="New Payment" showTitle={true} width={700} height={'auto'}>
+                <Position my={{x: 5, y: 5}} at={{x: 10, y: 10}} of={window} />
+              </Popup>
+              <Form>
+                <Item itemType="group" caption="Info" colCount={2} colSpan={2}>
+                  <Item dataField="tok" isRequired/>
+                  <Item dataField="mname" isRequired />
+                  <Item dataField="mid" isRequired />
+                  <Item dataField="spay" isRequired/>
+                  <Item dataField="reg_date" />
+                  <Item dataField="pay_dtm" />
+                  <Item dataField="bpay"/>
+                  <Item dataField="qpay"/>
+                  <Item dataField="accea" isRequired/>
+                  <Item dataField="qaccea" isRequired/>
+                </Item>
+
+                <Item itemType="group" caption="Details" colCount={2} colSpan={2}>
+                  <Item
+                    dataField="content"
+                    editorType="dxTextArea"
+                    colSpan={2}
+                    editorOptions={{ height: 100 }} />
+                </Item>
+              </Form>
+            </Editing>
+            <Column dataField="tok" caption="구분(tok)" dataType="string" width={125} visible={false} >
+              <Lookup dataSource={states} valueExpr="name" displayExpr="name" />
+            </Column>
+            <Column dataField="mname" caption="성명(mname)" dataType="string" visible={false}/>
+            <Column dataField="mid" caption="아이디(mid)" dataType="string" visible={false}/>
+            <Column dataField="spay" caption="결제금액(spay)" dataType="number" visible={false}/>
+            <Column dataField="reg_date" caption="가입일시(reg_date)" dataType="date" visible={false}/>
+            <Column dataField="pay_dtm" caption="결제일시(pay_dtm)" dataType="date" visible={false}/>
+            <Column dataField="bpay" caption="금액(bpay)" dataType="number" visible={false}/>
+            <Column dataField="qpay" caption="(퀵)금액(qpay)" dataType="number" visible={false}/>
+            <Column dataField="accea" caption="갯수(accea)" dataType="number" visible={false}/>
+            <Column dataField="qaccea" caption="(퀵)갯수(qaccea)" dataType="number" visible={false}/>
+            <Column dataField="content" caption="내용(content)" dataType="string" visible={false} />
+          </DataGrid>
+          {/* 새 칼럼 추가 - 종료 */}
+          
+
+          <p style={{
+            display: 'flex',
+            fontSize: '11px',
+            margin: 0,
+            marginBottom: '5px'
+          }}>
+             <button onClick={e => this.setState({ showDetailRow: !this.state.showDetailRow })} style={{
+              backgroundColor: "white",
+              padding: "5px 7px",
+              borderRadius: "3px",
+              border: "1px solid #dfdfdf",
+              cursor: "pointer",
+              marginRight: "5px",
+              color: 'gray'
+            }}>
+              { this.state.showDetailRow ? "간략히" : "자세히"}
+            </button>
+            <button onClick={this.toggleGridTableDetails} style={{
+                backgroundColor: "white",
+                padding: "5px 7px",
+                borderRadius: "3px",
+                border: "1px solid #dfdfdf",
+                cursor: "pointer",
+                color: 'gray'
+            }}>
+              { this.state.isGridDetails ? "Close" : "Settings" }
+            </button>
+           
+          </p>
+          <div className="options" style={this.state.isGridDetails ? { height: "auto", opacity: 1, transition: ".5s" } : { opacity: 0, height: 0, zIndex: -1, cursor: "default", transform: 'scale(0)', marginRight: "20%" } }>
+            <div className="option">
+              <span>Start Edit Action</span>
+                  &nbsp;
+              <SelectBox
+                items={['click', 'dblClick']} 
+                value={this.state.startEditAction}
+                onValueChanged={this.onStartEditActionChanged}>
+              </SelectBox>
+            </div>
+            <div className="option">
+              <CheckBox
+                value={this.state.selectTextOnEditStart}
+                text="Select Text on Edit Start"
+                onValueChanged={this.onSelectTextOnEditStartChanged}
+              />
+            </div>
+
+            <div className="option">
+              <span>Apply Filter </span>
+              <SelectBox items={this.applyFilterTypes}
+                value={this.state.currentFilter}
+                onValueChanged={this.onCurrentFilterChanged}
+                valueExpr="key"
+                displayExpr="name"
+                disabled={!this.state.showFilterRow} />
+            </div>
+            <div className="option">
+              <CheckBox text="Filter Row"
+                value={this.state.showFilterRow}
+                onValueChanged={this.onShowFilterRowChanged} />
+            </div>
+            <div className="option">
+              <CheckBox text="Header Filter"
+                value={this.state.showHeaderFilter}
+                onValueChanged={this.onShowHeaderFilterChanged} />
+            </div>
+          
+            <div className="option">
+              <span>Column resizing mode:&nbsp;</span>
+              <SelectBox items={resizingModes}
+                value={this.state.mode}
+                width={250}
+                onValueChanged={this.changeResizingMode} />
+            </div>
         
-
-
-        <button onClick={this.toggleGridTableDetails} style={{
-            backgroundColor: "white",
+          </div>
+          <select onChange={this.onChangePageSize} defaultValue={this.defaultPageSize} style={{
             padding: "5px 7px",
             borderRadius: "3px",
             border: "1px solid #dfdfdf",
             cursor: "pointer",
-            margin: "5px 0",
-            textAlign: 'right',
-            marginLeft: 'auto',
-            display: 'block',
-            fontSize: '11px',
-            color: 'gray'
-        }}>
-          { this.state.isGridDetails ? "숨기기" : "자세히" }
-        </button>
-        
-         <div className="options" style={this.state.isGridDetails ? { height: "auto", opacity: 1, transition: ".5s" } : { opacity: 0, height: 0, zIndex: -1, cursor: "default", transform: 'scale(0)', marginRight: "20%" } }>
-          <div className="option">
-            <span>Start Edit Action</span>
-                &nbsp;
-            <SelectBox
-              items={['click', 'dblClick']} 
-              value={this.state.startEditAction}
-              onValueChanged={this.onStartEditActionChanged}>
-            </SelectBox>
-          </div>
-          <div className="option">
-            <CheckBox
-              value={this.state.selectTextOnEditStart}
-              text="Select Text on Edit Start"
-              onValueChanged={this.onSelectTextOnEditStartChanged}
-            />
-          </div>
-
-          <div className="option">
-            <span>Apply Filter </span>
-            <SelectBox items={this.applyFilterTypes}
-              value={this.state.currentFilter}
-              onValueChanged={this.onCurrentFilterChanged}
-              valueExpr="key"
-              displayExpr="name"
-              disabled={!this.state.showFilterRow} />
-          </div>
-          <div className="option">
-            <CheckBox text="Filter Row"
-              value={this.state.showFilterRow}
-              onValueChanged={this.onShowFilterRowChanged} />
-          </div>
-          <div className="option">
-            <CheckBox text="Header Filter"
-              value={this.state.showHeaderFilter}
-              onValueChanged={this.onShowHeaderFilterChanged} />
-          </div>
-        
-          <div className="option">
-            <span>Column resizing mode:&nbsp;</span>
-            <SelectBox items={resizingModes}
-              value={this.state.mode}
-              width={250}
-              onValueChanged={this.changeResizingMode} />
-          </div>
-       
-        </div>
-        pageCount: 
-        <select onChange={this.onChangePageSize} defaultValue={this.defaultPageSize} style={{
-          padding: "5px 7px",
-          borderRadius: "3px",
-          border: "1px solid #dfdfdf",
-          cursor: "pointer",
-          margin: "3px"
-        }}>
-          {
-            this.pageIndex.map((item, key) => <option key={key} value={item}>{ item }</option> )
-          }
-        </select>
-        
-
-        <Editing
-            mode="cell"
-            allowUpdating={true} />
-        <Button 
-          id="gridDeleteSelected"
-          text="Delete Selected Records"
-          height={34}
-          disabled={!this.state.selectedItemKeys.length}
-          onClick={this.deleteRecords} 
-        />
-       
-          
-        
-        <DataGrid id="gridContainer"
-          ref={(ref) => this.dataGrid = ref}
-          dataSource={this.props.orders}
-          showBorders={true}
-          allowColumnResizing={true}
-          // keyExpr={"id"}
-          selectedRowKeys={this.state.selectedItemKeys}
-          onSelectionChanged={this.selectionChanged}
-          // wordWrapEnabled={true}
-          onRowUpdated={data => {
-            // Table 전체 행 업데이트 완료시 실행됨.
-            console.log("onRowUpdated: ", data);
-          }}
-          onRowUpdating={data => {
-            // Table 전체 행 업데이트 중 실행됨. 
-            // newData와 oldData를 제공해줌.
-            // 저장 클릭 시 해당 이벤트가 실행됨.
-            const { updatePayment } = this.props;
-            const { newData, oldData: { id }} = data;
-            updatePayment({
-              variables: {
-                data: {
-                  ...newData
-                },
-                where: {
-                  id
-                }
-              }
-            });
-
-            console.log("onRowUpdating: ", data);
-            return data;
-          }}
-          onEditorPrepared={data => {
-            // console.log("DATA: ", data);
-            return data;
-          }}
-          // onRowRemoving={data => {
-          //   console.log("onRowRemoving: ", data);
-          // }}  
-          onRowRemoved={data => {
-            console.log("onRowRemoved: ", data);
-          }}
-        >
-        <Selection mode="multiple" />
-        <Paging 
-            defaultPageSize={this.defaultPageSize} 
-            pageSize={this.state.pageSize}
-        />
-        {/* Popup Start */}
-       
-        {/* Popup End */}
-        <Editing
-          mode="batch"
-          allowUpdating={true}
-          // allowAdding={true}
-          selectTextOnEditStart={this.state.selectTextOnEditStart}
-          startEditAction={this.state.startEditAction}
-        />
-        <Pager
-          showNavigationButtons={true}
-          showPageSizeSelector={true}
-          // allowedPageSizes={[1, 2, 3]}
-          allowedPageSizes={[]}
-          infoText={
-            (currentIdx: number, totalIdx: number, totalCnt: number) => {
-              return `BKD_현재_커서_${currentIdx} / BKD_마지막_커서_${totalIdx} / BKD_전체_데이터_${totalCnt}`;
+            marginRight: "7px"
+          }}>
+            {
+              this.pageIndex.map((item, key) => <option key={key} value={item}>{ item }</option> )
             }
-          }
-          showInfo={true} 
-        />
-        <Export enabled={true} fileName="orders" allowExportSelectedData={true} />
-        <FilterRow 
-          visible={this.state.showFilterRow}
-          applyFilter={this.state.currentFilter} 
-        />
-        <HeaderFilter visible={this.state.showHeaderFilter} />
-        <SearchPanel 
-          visible={true}
-          width={240}
-          placeholder="Search..." 
-        /> 
-          {/* <Column 
-            dataField="OrderNumber"
-            width={140}
-            dataType="number"
-            allowEditing={false}
-            caption="Invoice Number">
-            <HeaderFilter groupInterval={10000} />
-          </Column> */}
-          {/* <Column dataField="OrderDate"
-            alignment="right"
-            dataType="date"
-            width={120}
-            calculateFilterExpression={this.calculateFilterExpression}
-            >
-            <HeaderFilter dataSource={this.orderHeaderFilter} />
-          </Column>
-          <Column dataField="DeliveryDate"
-            alignment="right"
-            dataType="datetime"
-            format="M/d/yyyy, HH:mm"
-            width={180} /> */}
-          {/* <Column dataField="SaleAmount"
-            alignment="right"
-            dataType="number"
-            format="currency"
-            // hidingPriority={0}
-            editorOptions={saleAmountEditorOptions}>
-            <HeaderFilter dataSource={this.saleAmountHeaderFilter} />
-          </Column>
-          <Column dataField="Employee" />
-          <Column dataField="CustomerStoreCity"
-            caption="City">
-            <HeaderFilter allowSearch={true} />
-          </Column> */}
+          </select>
+          
 
-          {/* [1] 칼럼 시작함. */}
-          <Column 
-            width="auto"
-            alignment="right"
-            dataField="id"
-            allowEditing={false}
-            fixed={true}
-            caption="U_ID(id)">
-            <HeaderFilter allowSearch={true} />
-          </Column>
-          <Column 
-            width="auto"
-            alignment="right"
-            dataField="tok"
-            caption="구분(tok)">
-            <HeaderFilter allowSearch={true} />
-            <Lookup dataSource={states} valueExpr="name" displayExpr="name" />
-          </Column>
-          <Column 
-            visible={false}
-            width="auto"
-            alignment="right"
-            dataField="tnumber"
-            caption="tnumber">
-            <HeaderFilter allowSearch={true} />
-          </Column>
-          <Column 
-            width="auto"
-            alignment="right"
-            dataField="mname"
-            caption="성명(mname)">
-            <HeaderFilter allowSearch={true} />
-          </Column>
-          <Column 
-            width="auto"
-            alignment="right"
-            dataField="mid"
-            caption="아이디(mid)">
-            <HeaderFilter allowSearch={true} />
-          </Column>
-          <Column 
-            width="auto"
-            dataType="number"
-            format="currency"
-            alignment="right"
-            dataField="spay"
-            caption="결제금액(spay)"
-            editorOptions={this.saleAmountHeaderFilter}
-            >
-            <HeaderFilter allowSearch={true} dataSource={this.saleAmountHeaderFilter}/>
-          </Column>
-          <Column 
-            visible={false}
-            width="auto"
-            alignment="right"
-            dataField="trno"
-            caption="trno">
-            <HeaderFilter allowSearch={true} />
-          </Column>
-          <Column 
-            width="auto"
-            alignment="right"
-            dataType="datetime"
-            format="M/d/yyyy, HH:mm"
-            dataField="reg_date"
-            caption="가입일시(reg_date)">
-            <HeaderFilter allowSearch={true} />
-          </Column>
-          <Column 
-            width="auto"
-            alignment="right"
-            dataType="datetime"
-            format="M/d/yyyy, HH:mm"
-            dataField="pay_dtm"
-            caption="결제일시(pay_dtm)">
-            <HeaderFilter allowSearch={true} />
-          </Column>
-          <Column 
-            visible={false}
-            width="auto"
-            alignment="right"
-            dataField="content"
-            caption="content">
-            <HeaderFilter allowSearch={true} />
-          </Column>
-          <Column 
-            width="auto"
-            visible={false}
-            alignment="right"
-            dataField="bpay"
-            caption="bpay">
-            <HeaderFilter allowSearch={true} />
-          </Column>
-          <Column 
-            width="auto"
-            visible={false}
-            alignment="right"
-            dataField="qpay"
-            caption="qpay">
-            <HeaderFilter allowSearch={true} />
-          </Column>
-          <Column 
-            width="auto"
-            visible={false}
-            alignment="right"
-            dataField="brefund"
-            caption="brefund">
-            <HeaderFilter allowSearch={true} />
-          </Column>
-          <Column 
-            width="auto"
-            visible={false}
-            alignment="right"
-            dataField="qrefund"
-            caption="qrefund">
-            <HeaderFilter allowSearch={true} />
-          </Column>
-          <Column 
-            width="auto"
-            alignment="right"
-            dataField="accea"
-            caption="기본형 신청계좌 수(accea)">
-            <HeaderFilter allowSearch={true} />
-          </Column>
-          <Column 
-            width="auto"
-            alignment="right"
-            dataField="qaccea"
-            caption="퀵형 신청계좌 수(qaccea)">
-            <HeaderFilter allowSearch={true} />
-          </Column>
-          <Column 
-            visible={false}
-            width="auto"
-            alignment="right"
-            dataField="req_day"
-            caption="req_day">
-            <HeaderFilter allowSearch={true} />
-          </Column>
-          <Column 
-            visible={false}
-            width="auto"
-            alignment="right"
-            dataField="req_qday"
-            caption="req_qday">
-            <HeaderFilter allowSearch={true} />
-          </Column>
-          <Column 
-            visible={false}
-            width="auto"
-            alignment="right"
-            dataField="endday"
-            caption="endday">
-            <HeaderFilter allowSearch={true} />
-          </Column>
-          <Column 
-            visible={false}
-            width="auto"
-            alignment="right"
-            dataField="qendday"
-            caption="qendday">
-            <HeaderFilter allowSearch={true} />
-          </Column>
-          <Column 
-            visible={false}
-            width="auto"
-            alignment="right"
-            dataField="msg2"
-            caption="msg2">
-            <HeaderFilter allowSearch={true} />
-          </Column>
-          <Column 
-            width="auto"
-            alignment="right"
-            dataType='date'
-            dataField="createdAt"
-            calculateFilterExpression={this.calculateFilterExpression}
-            caption="생성일(createdAt)">
-            <HeaderFilter allowSearch={true} dataSource={this.orderHeaderFilter}/>
-          </Column>
-          <Column 
-            width="auto"
-            alignment="right"
-            dataField="updatedAt"
-            dataType="datetime"
-            format="M/d/yyyy, HH:mm"
-            caption="업데이트일(updatedAt)">
-            <HeaderFilter allowSearch={true} />
-          </Column>
+          <Editing
+              mode="cell"
+              allowUpdating={true} />
+          <Button 
+            id="gridDeleteSelected"
+            text="Delete Selected Records"
+            height={34}
+            disabled={!this.state.selectedItemKeys.length}
+            onClick={this.deleteRecords} 
+          />
+        
+            
+          
+          <DataGrid 
+            id="gridContainer"
+            ref={(ref) => this.dataGrid = ref}
+            dataSource={this.props.orders}
+            showBorders={true}
+            allowColumnResizing={true}
+            keyExpr={"id"}
+            selectedRowKeys={this.state.selectedItemKeys}
+            onSelectionChanged={this.selectionChanged}
+            // wordWrapEnabled={true}
+            onRowUpdated={data => {
+              // Table 전체 행 업데이트 완료시 실행됨.
+              console.log("onRowUpdated: ", data);
+            }}
+            onRowUpdating={data => {
+              // Table 전체 행 업데이트 중 실행됨. 
+              // newData와 oldData를 제공해줌.
+              // 저장 클릭 시 해당 이벤트가 실행됨.
+              const { updatePayment } = this.props;
+              const { newData, oldData: { id }} = data;
+              updatePayment({
+                variables: {
+                  data: {
+                    ...newData
+                  },
+                  where: {
+                    id
+                  }
+                }
+              });
+              // console.log("onRowUpdating: ", data);
+              return data;
+            }}
+            onEditorPrepared={data => {
+              // console.log("DATA: ", data);
+              return data;
+            }}
+            // onRowRemoving={data => {
+            //   console.log("onRowRemoving: ", data);
+            // }}  
+            onRowRemoved={data => {
+              // console.log("onRowRemoved: ", data);
+            }}
+          >
+          <Selection mode="multiple" />
+          <Paging 
+              defaultPageSize={this.defaultPageSize} 
+              pageSize={this.state.pageSize}
+          />
+          {/* Popup Start */}
+        
+          {/* Popup End */}
+          <Editing
+            mode="batch"
+            allowUpdating={true}
+            // allowAdding={true}
+            selectTextOnEditStart={this.state.selectTextOnEditStart}
+            startEditAction={this.state.startEditAction}
+          />
+          <Pager
+            showNavigationButtons={true}
+            showPageSizeSelector={true}
+            // allowedPageSizes={[1, 2, 3]}
+            allowedPageSizes={[]}
+            infoText={
+              (currentIdx: number, totalIdx: number, totalCnt: number) => {
+                return `현재_커서_${currentIdx} / 마지막_커서_${totalIdx} / 전체_데이터_${totalCnt}`;
+              }
+            }
+            showInfo={true} 
+          />
+          <Export enabled={true} fileName="orders" allowExportSelectedData={true} />
+          <FilterRow 
+            visible={this.state.showFilterRow}
+            applyFilter={this.state.currentFilter} 
+          />
+          <HeaderFilter visible={this.state.showHeaderFilter} />
+          <SearchPanel 
+            visible={true}
+            width={240}
+            placeholder="Search..." 
+          /> 
+            {/* <Column 
+              dataField="OrderNumber"
+              width={140}
+              dataType="number"
+              allowEditing={false}
+              caption="Invoice Number">
+              <HeaderFilter groupInterval={10000} />
+            </Column> */}
+            {/* <Column dataField="OrderDate"
+              alignment="right"
+              dataType="date"
+              width={120}
+              calculateFilterExpression={this.calculateFilterExpression}
+              >
+              <HeaderFilter dataSource={this.orderHeaderFilter} />
+            </Column>
+            <Column dataField="DeliveryDate"
+              alignment="right"
+              dataType="datetime"
+              format="M/d/yyyy, HH:mm"
+              width={180} /> */}
+            {/* <Column dataField="SaleAmount"
+              alignment="right"
+              dataType="number"
+              format="currency"
+              // hidingPriority={0}
+              editorOptions={saleAmountEditorOptions}>
+              <HeaderFilter dataSource={this.saleAmountHeaderFilter} />
+            </Column>
+            <Column dataField="Employee" />
+            <Column dataField="CustomerStoreCity"
+              caption="City">
+              <HeaderFilter allowSearch={true} />
+            </Column> */}
 
-          {/* [1] 칼럼 종료함. */}
-          <Summary>
-            <TotalItem
-              column="id"
-              summaryType="count" />
-            <TotalItem
-              column="tnumber"
-              summaryType="sum" />
-            <TotalItem
-              column="OrderNumber"
-              // summaryType=""
-              // customizeText={data => {
-              //   console.log("DATA: ", data);
-              //   console.log("this.state.selectedItemKeys[0];: ", this.state.selectedItemKeys);
-              //   let total: number = 0;
-              //   this.state.selectedItemKeys.map(currentId => {
-              //     const currentData = this.orders.store()._array.find(item => {
-              //       return item.ID === currentId;
-              //     });
-              //     // console.log("currentData: ", currentData);
-              //     if(currentData && currentData.SaleAmount) {
-              //       total += currentData.SaleAmount;
-              //     }
-              //   });
-              //   return total > 0 ? `Checked: $${total}` : ``;
-              // }}
-              valueFormat="currency" />
-          </Summary>
-        </DataGrid> 
+            {/* [1] 칼럼 시작함. */}
+            <Column 
+              width="auto"
+              alignment="right"
+              dataField="id"
+              allowEditing={false}
+              fixed={true}
+              caption="U_ID(id)">
+              <HeaderFilter allowSearch={true} />
+            </Column>
+            <Column 
+              width="auto"
+              alignment="right"
+              dataField="tok"
+              caption="구분(tok)">
+              <HeaderFilter allowSearch={true} />
+              <Lookup dataSource={states} valueExpr="name" displayExpr="name" />
+            </Column>
+            <Column 
+              visible={this.state.showDetailRow}
+              width="auto"
+              alignment="right"
+              allowEditing={false}
+              dataField="tnumber"
+              caption="tnumber">
+              <HeaderFilter allowSearch={true} />
+            </Column>
+            <Column 
+              width="auto"
+              alignment="right"
+              dataField="mname"
+              caption="성명(mname)">
+              <HeaderFilter allowSearch={true} />
+            </Column>
+            <Column 
+              width="auto"
+              alignment="right"
+              dataField="mid"
+              caption="아이디(mid)">
+              <HeaderFilter allowSearch={true} />
+            </Column>
+            <Column 
+              width="auto"
+              dataType="number"
+              format="currency"
+              alignment="right"
+              dataField="spay"
+              caption="결제금액(spay)"
+              editorOptions={this.saleAmountHeaderFilter}
+              >
+              <HeaderFilter allowSearch={true} dataSource={this.saleAmountHeaderFilter}/>
+            </Column>
+            <Column 
+              visible={this.state.showDetailRow}
+              width="auto"
+              alignment="right"
+              dataField="trno"
+              allowEditing={false}
+              caption="trno">
+              <HeaderFilter allowSearch={true} />
+            </Column>
+            <Column 
+              allowEditing={false}
+              width="auto"
+              alignment="right"
+              dataType="datetime"
+              format="M/d/yyyy, HH:mm"
+              dataField="reg_date"
+              caption="가입일시(reg_date)">
+              <HeaderFilter allowSearch={true} />
+            </Column>
+            <Column 
+              allowEditing={false}
+              width="auto"
+              alignment="right"
+              dataType="datetime"
+              format="M/d/yyyy, HH:mm"
+              dataField="pay_dtm"
+              caption="결제일시(pay_dtm)">
+              <HeaderFilter allowSearch={true} />
+            </Column>
+            <Column 
+              allowEditing={false}
+              visible={this.state.showDetailRow}
+              width="auto"
+              alignment="right"
+              dataField="content"
+              caption="content">
+              <HeaderFilter allowSearch={true} />
+            </Column>
+            <Column 
+              allowEditing={false}
+              width="auto"
+              visible={this.state.showDetailRow}
+              alignment="right"
+              dataField="bpay"
+              caption="bpay">
+              <HeaderFilter allowSearch={true} />
+            </Column>
+            <Column 
+              allowEditing={false}
+              width="auto"
+              visible={this.state.showDetailRow}
+              alignment="right"
+              dataField="qpay"
+              caption="qpay">
+              <HeaderFilter allowSearch={true} />
+            </Column>
+            <Column 
+              allowEditing={false}
+              width="auto"
+              visible={this.state.showDetailRow}
+              alignment="right"
+              dataField="brefund"
+              caption="brefund">
+              <HeaderFilter allowSearch={true} />
+            </Column>
+            <Column 
+              allowEditing={false}
+              width="auto"
+              visible={this.state.showDetailRow}
+              alignment="right"
+              dataField="qrefund"
+              caption="qrefund">
+              <HeaderFilter allowSearch={true} />
+            </Column>
+            <Column 
+              width="auto"
+              alignment="right"
+              dataField="accea"
+              caption="기본형 신청계좌 수(accea)">
+              <HeaderFilter allowSearch={true} />
+            </Column>
+            <Column 
+              width="auto"
+              alignment="right"
+              dataField="qaccea"
+              caption="퀵형 신청계좌 수(qaccea)">
+              <HeaderFilter allowSearch={true} />
+            </Column>
+            <Column 
+              allowEditing={false}
+              visible={this.state.showDetailRow}
+              width="auto"
+              alignment="right"
+              dataField="req_day"
+              caption="req_day">
+              <HeaderFilter allowSearch={true} />
+            </Column>
+            <Column 
+              allowEditing={false}
+              visible={this.state.showDetailRow}
+              width="auto"
+              alignment="right"
+              dataField="req_qday"
+              caption="req_qday">
+              <HeaderFilter allowSearch={true} />
+            </Column>
+            <Column 
+              allowEditing={false}
+              visible={this.state.showDetailRow}
+              width="auto"
+              alignment="right"
+              dataField="endday"
+              caption="endday">
+              <HeaderFilter allowSearch={true} />
+            </Column>
+            <Column 
+              allowEditing={false}
+              visible={this.state.showDetailRow}
+              width="auto"
+              alignment="right"
+              dataField="qendday"
+              caption="qendday">
+              <HeaderFilter allowSearch={true} />
+            </Column>
+            <Column 
+              allowEditing={false}
+              visible={this.state.showDetailRow}
+              width="auto"
+              alignment="right"
+              dataField="msg2"
+              caption="msg2">
+              <HeaderFilter allowSearch={true} />
+            </Column>
+            <Column 
+              allowEditing={false}
+              width="auto"
+              alignment="right"
+              dataType='date'
+              dataField="createdAt"
+              calculateFilterExpression={this.calculateFilterExpression}
+              caption="생성일(createdAt)">
+              <HeaderFilter allowSearch={true} dataSource={this.orderHeaderFilter}/>
+            </Column>
+            <Column 
+              allowEditing={false}  
+              width="auto"
+              alignment="right"
+              dataField="updatedAt"
+              dataType="datetime"
+              format="M/d/yyyy, HH:mm"
+              caption="업데이트일(updatedAt)">
+              <HeaderFilter allowSearch={true} />
+            </Column>
+
+            {/* [1] 칼럼 종료함. */}
+            <Summary>
+              <TotalItem
+                column="id"
+                summaryType="count" 
+              />
+              {/* <TotalItem
+                column="id"
+                summaryType="Total" /> */}
+              <TotalItem
+                column="tnumber"
+                summaryType="sum" />
+              <TotalItem
+                column="OrderNumber"
+                // summaryType=""
+                // customizeText={data => {
+                //   console.log("DATA: ", data);
+                //   console.log("this.state.selectedItemKeys[0];: ", this.state.selectedItemKeys);
+                //   let total: number = 0;
+                //   this.state.selectedItemKeys.map(currentId => {
+                //     const currentData = this.orders.store()._array.find(item => {
+                //       return item.ID === currentId;
+                //     });
+                //     // console.log("currentData: ", currentData);
+                //     if(currentData && currentData.SaleAmount) {
+                //       total += currentData.SaleAmount;
+                //     }
+                //   });
+                //   return total > 0 ? `Checked: $${total}` : ``;
+                // }}
+                valueFormat="currency" />
+            </Summary>
+          </DataGrid> 
+        </div>
+        
       </div>
     );
   }

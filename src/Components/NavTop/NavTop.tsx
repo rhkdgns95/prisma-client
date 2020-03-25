@@ -48,6 +48,7 @@ const Container = styled.div<IContainer>`
     height: ${props => props.navHeight}px;
     background-color: ${props => props.theme.navTopColor};
     box-shadow: 0 1px 2px 1px rgba(0,0,0,.22);
+    border-bottom: 2px solid #a0a0a0;
 `;
 const Wrapper = styled.div`
     display: flex;
