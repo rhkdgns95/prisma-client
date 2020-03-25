@@ -1,17 +1,19 @@
 import React, { createContext, useContext, useEffect } from 'react';
 import { useQuery, useMutation, useSubscription } from 'react-apollo';
-import { GET_PAYMENTS, UPDATE_PAYMENT, SUBSCRIPTION_PAYMENTS, DELETE_PAYMENT } from './PaymentQueries';
+import { GET_PAYMENTS, UPDATE_PAYMENT, SUBSCRIPTION_PAYMENTS, DELETE_PAYMENT, CREATE_PAYMENT } from './PaymentQueries';
 import { SubscribeToMoreOptions } from 'apollo-boost';
 
 interface IContext {
     loadingGetPayments: boolean;
     payments: Array<IPayment>;
+    queryCreatePayment: () => any;
     queryUpdatePayment: () => any;
     queryDeletePayment: () => any;
 }
 const Context: IContext = {
     payments: [],
     loadingGetPayments: false,
+    queryCreatePayment: () => {},
     queryUpdatePayment: () => {},
     queryDeletePayment: () => {}
 }
@@ -24,7 +26,7 @@ const useFetch = (): { value: IContext } => {
    
     
     /**
-     *  [1] GetPayments
+     *  [0] GetPayments
      */
     const { data, loading: loadingGetPayments, subscribeToMore } = useQuery<{payments: Array<any> | [], payment: any}>(GET_PAYMENTS, {
         onCompleted: data => {
@@ -35,6 +37,17 @@ const useFetch = (): { value: IContext } => {
         },
         fetchPolicy: "cache-and-network"
     });
+    /**
+     *  [1] CreatePayment
+     */
+    const [ queryCreatePayment ] = useMutation(CREATE_PAYMENT, {
+        onCompleted: data => {
+            console.log("CreatePayment onCompleted: ", data);
+        },
+        onError: data => {
+            console.log("CreatePayment onError: ", data);
+        }
+    })
 
     /**
      *  [2] UpdatePayment
@@ -148,6 +161,7 @@ const useFetch = (): { value: IContext } => {
         value: {
             loadingGetPayments,
             payments: data?.payments || [],
+            queryCreatePayment,
             queryUpdatePayment,
             queryDeletePayment
         }

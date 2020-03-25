@@ -3,7 +3,7 @@ import PaymentProvider, { usePaymentContext } from './PaymentProvider';
 import { useAppContext } from '../../Components/App/AppProvider';
 import { RouteComponentProps } from 'react-router-dom';
 import navigations from '../../navigations';
-import Grid from '../../ApiComponents/Grid';
+import GridPayment from '../../ApiComponents/Grid/GridPayment';
 
 interface IProps extends RouteComponentProps<any> {
 
@@ -28,7 +28,7 @@ const Payment: React.FC<IProps> = ({ match: { path }}) => {
 };
 
 const PaymentPresenter = () => {
-    const { loadingGetPayments, payments, queryUpdatePayment, queryDeletePayment } = usePaymentContext();
+    const { loadingGetPayments, payments, queryUpdatePayment, queryDeletePayment, queryCreatePayment } = usePaymentContext();
 
     /** 
      *  향후 보완점 [매우 중요!]
@@ -45,7 +45,7 @@ const PaymentPresenter = () => {
         {
             payments && 
             payments.length > 0 &&  
-            <Grid orders={payments} updatePayment={queryUpdatePayment} deletePayment={queryDeletePayment}/>
+            <GridPayment orders={payments} createPayment={queryCreatePayment} updatePayment={queryUpdatePayment} deletePayment={queryDeletePayment}/>
         }
         </>
     )
