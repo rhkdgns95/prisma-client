@@ -22,6 +22,9 @@ const GlobalStyles = createGlobalStyle`
         text-decoration: inherit;
         color: inherit;
     }
+    #root {
+        height: 100%;
+    }
     .api-container {
         width: 100%;
     }

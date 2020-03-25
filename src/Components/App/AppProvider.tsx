@@ -6,6 +6,7 @@ interface IContext {
     navigation: ILink | null;
     handleChangeNavigation: (navIndex: ILink) => void;
     toggleIsHiddenNav: () => void;
+    toggleLoggedIn: () => void;
 }
 
 const Context: IContext = {
@@ -13,7 +14,8 @@ const Context: IContext = {
     isHiddenNav: false,
     navigation: null,
     handleChangeNavigation: () => {},
-    toggleIsHiddenNav: () => {}
+    toggleIsHiddenNav: () => {},
+    toggleLoggedIn: () => {}
 };
 
 
@@ -25,14 +27,14 @@ const Context: IContext = {
 //     }
 // ];
 
-
-
 const AppContext: React.Context<IContext> = createContext<IContext>(Context);
 
 const useAppContext = () => useContext(AppContext);
 
 const useFetch = (): { value: IContext } => {
-    const [ loggedIn ] = useState<boolean>(true);
+    
+    const [ loggedIn, setLoggedIn ] = useState<boolean>(Boolean(window.localStorage.getItem("x-jwt") || ""));
+
     const [ isHiddenNav, setIsHiddenNav ] = useState<boolean>(false);
     const [ navigation, setNavigation ] = useState<ILink | null>(null);
     
@@ -43,7 +45,7 @@ const useFetch = (): { value: IContext } => {
             window.document.title = `Careda | ${navigation.name}`;
         }
     }, [navigation]);
-
+    
     const toggleIsHiddenNav = () => {
         setIsHiddenNav(!isHiddenNav);
     } 
@@ -51,6 +53,18 @@ const useFetch = (): { value: IContext } => {
     const handleChangeNavigation = (newNav: ILink) => {
         setNavigation(newNav);
     };
+
+    const toggleLoggedIn = () => {
+        setLoggedIn(prevState => {
+            if(prevState) { // 로그인 -> 로그아웃
+                window.localStorage.removeItem('x-jwt');
+                return false;
+            } else { // 로그아웃 -> 로그인
+                window.localStorage.setItem('x-jwt', 'xxxx');
+                return true;
+            }
+        });
+    }
 
     // const [ navLeftLink ] = useState<>();
     // const [ topLinkGroup ] = useState<>();
@@ -61,7 +75,8 @@ const useFetch = (): { value: IContext } => {
             isHiddenNav,
             navigation,
             handleChangeNavigation,
-            toggleIsHiddenNav
+            toggleIsHiddenNav,
+            toggleLoggedIn
         }
     };
 };

@@ -10,7 +10,7 @@ interface IProps {
 const LayoutContainer: React.FC<IProps> = ({
     children
 }) => {
-    const { isHiddenNav, navigation, toggleIsHiddenNav } = useAppContext();
+    const { isHiddenNav, navigation, toggleIsHiddenNav, toggleLoggedIn } = useAppContext();
     const navWidth = 150;
     const navHeight = 80;
 
@@ -18,7 +18,7 @@ const LayoutContainer: React.FC<IProps> = ({
         <Container>
             <Wrapper className={isHiddenNav ? "active" : ""} navWidth={navWidth} navHeight={navHeight}>
                 <NavLeft navigation={navigation} isHiddenNav={isHiddenNav} navWidth={navWidth} />
-                <NavTop navigation={navigation} isHiddenNav={isHiddenNav} toggleIsHiddenNav={toggleIsHiddenNav} navHeight={navHeight}/>
+                <NavTop navigation={navigation} isHiddenNav={isHiddenNav} toggleIsHiddenNav={toggleIsHiddenNav} navHeight={navHeight} loggedOut={toggleLoggedIn}/>
                 <Content>
                 { 
                     children
